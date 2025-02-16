@@ -22,8 +22,8 @@ public class GithubRepositoryService {
     }
 
     public GithubUserRepositoryResponse[] getUserRepositories(String username) {
-        if (username == null || username.isEmpty()) {
-            throw new RuntimeException("Unable to retrieve repositories for blank username");
+        if (username == null || username.isBlank()) {
+            throw new IllegalArgumentException("Unable to retrieve repositories for blank username");
         }
 
         ResponseEntity<GithubUserRepositoryResponse[]> callResponse =
