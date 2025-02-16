@@ -40,7 +40,7 @@ The application is built using Spring Boot and follows a layered architecture:
 - **Testing**: Contains unit and integration tests.
 
 ### Schema Generation
-This project uses [jsonschema2pojo](http://www.jsonschema2pojo.org/) to generate Java classes from JSON schemas. The schemas are located in the `src/main/resources/schemas` directory. The generated classes are placed in the `target/generated-sources/java/com/markshivers/models` directory. The JSON schemas were acquired from github here: 
+This project uses [jsonschema2pojo](http://www.jsonschema2pojo.org/) to generate Java classes from JSON schemas. The schemas are located in the `src/main/resources/schema` directory. The generated classes are placed in the `target/generated-sources/java/com/markshivers/models` directory. The JSON schemas were acquired from github here: 
 - https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-a-user 
 - https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repositories-for-a-user
  
@@ -60,3 +60,4 @@ This architecture ensures separation of concerns, making the application more ma
 - Deployment Configuration
 - Integrating JSR Validation
 - Abstraction layer to allow for different data sources
+- Using Redis for caching

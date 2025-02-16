@@ -1,5 +1,6 @@
 package com.markshivers.branchtakehome.rest;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.markshivers.branchtakehome.github.GithubDataService;
 import com.markshivers.branchtakehome.model.UserView;
-import com.markshivers.models.user.GithubUserResponse;
-import com.markshivers.models.userRepository.GithubUserRepositoryResponse;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -21,6 +20,7 @@ public class VcsRestController {
         this.githubDataService = githubDataService;
     }
 
+    @Cacheable("userView")
     @GetMapping(value = "/compositeUserInformation/{username}")
     public ResponseEntity<UserView> getUserView(@PathVariable String username) {
         return ResponseEntity.ok(githubDataService.getGithubUserView(username));
