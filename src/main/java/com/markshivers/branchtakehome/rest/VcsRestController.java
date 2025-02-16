@@ -18,17 +18,7 @@ public class VcsRestController {
     private GithubDataService githubDataService;
 
     public VcsRestController(GithubDataService githubDataService) {
-
         this.githubDataService = githubDataService;
-    }
-    @GetMapping(value = "/userInformation/{username}")
-    public ResponseEntity<GithubUserResponse> getUserInformation(@PathVariable String username){
-        return ResponseEntity.ok(githubDataService.getGithubUser(username));
-    }
-
-    @GetMapping(value = "/userInformation/{username}/repositories")
-    public ResponseEntity<GithubUserRepositoryResponse[]> getUserRepositoryInformation(@PathVariable String username) {
-        return ResponseEntity.ok(githubDataService.getGithubUserRepositories(username));
     }
 
     @GetMapping(value = "/compositeUserInformation/{username}")

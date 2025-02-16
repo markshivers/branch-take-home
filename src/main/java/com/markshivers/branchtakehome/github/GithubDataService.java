@@ -1,6 +1,7 @@
 package com.markshivers.branchtakehome.github;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -15,40 +16,37 @@ public class GithubDataService {
     private GithubUserService githubUserService;
     private GithubRepositoryService githubRepositoryService;
 
-    public GithubDataService(GithubUserService githubUserService, GithubRepositoryService githubRepositoryService){
+    public GithubDataService(GithubUserService githubUserService, GithubRepositoryService githubRepositoryService) {
         this.githubUserService = githubUserService;
 
         this.githubRepositoryService = githubRepositoryService;
     }
 
-    public GithubUserResponse getGithubUser(String username) {
-        return githubUserService.getVcsUser(username);
-    }
-
-    public GithubUserRepositoryResponse[] getGithubUserRepositories(String username) {
-        return githubRepositoryService.getUserRepositories(username);
-    }
-
     public UserView getGithubUserView(String username) {
         GithubUserRepositoryResponse[] repositories = githubRepositoryService.getUserRepositories(username);
-        GithubUserResponse userResponse = githubUserService.getVcsUser(username);
+        GithubUserResponse userResponse = githubUserService.getUser(username);
 
         return mapToUserView(userResponse, repositories);
     }
 
-    private UserView mapToUserView(GithubUserResponse userResponse, GithubUserRepositoryResponse[] repositories){
+    private UserView mapToUserView(GithubUserResponse userResponse, GithubUserRepositoryResponse[] repositories) {
         return new UserView(
                 userResponse.getLogin(),
                 userResponse.getName(),
-                userResponse.getAvatarUrl().toString(),
-                userResponse.getAdditionalProperties().get("location").toString(),
+                Optional.ofNullable(userResponse.getAvatarUrl()).map(Object::toString).orElse(null),
+                getAdditionalProperty("location", userResponse),
                 userResponse.getEmail(),
-                userResponse.getUrl().toString(),
-                userResponse.getAdditionalProperties().get("created_at").toString(),
+                Optional.ofNullable(userResponse.getUrl()).map(Object::toString).orElse(null),
+                getAdditionalProperty("created_at", userResponse),
                 Arrays.stream(repositories).map(this::mapToRepositoryView).collect(Collectors.toList()));
     }
 
     private RepositoryView mapToRepositoryView(GithubUserRepositoryResponse repository) {
         return new RepositoryView(repository.getName(), repository.getHtmlUrl().toString());
+    }
+
+    private String getAdditionalProperty(String key, GithubUserResponse userResponse) {
+        Optional<Object> optProperty = Optional.ofNullable(userResponse.getAdditionalProperties().get(key));
+        return optProperty.map(Object::toString).orElse(null);
     }
 }

@@ -1,5 +1,8 @@
 package com.markshivers.branchtakehome;
 
+import static com.markshivers.branchtakehome.TestUtils.TEST_URL;
+import static com.markshivers.branchtakehome.TestUtils.USERNAME;
+import static com.markshivers.branchtakehome.TestUtils.objectMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -14,7 +17,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.ResponseEntity;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.markshivers.branchtakehome.config.RepositoryServiceConfiguration;
 import com.markshivers.branchtakehome.github.GithubRepositoryService;
 import com.markshivers.branchtakehome.utility.RestClient;
@@ -23,16 +25,12 @@ import com.markshivers.models.userRepository.GithubUserRepositoryResponse;
 public class GithubRepositoryServiceTest {
     private static GithubRepositoryService githubRepositoryService;
     private static final RestClient restClient = mock();
-    private final static String TEST_URL = "testUrl/%s";
-    private final static String USERNAME = "octocat";
     private final static String BAD_USERNAME_MESSAGE = "Unable to retrieve repositories for blank username";
     private static final RepositoryServiceConfiguration repositoryServiceConfiguration = new RepositoryServiceConfiguration(TEST_URL);
-    private static ObjectMapper objectMapper;
 
     @BeforeAll
     public static void setUp() {
         githubRepositoryService = new GithubRepositoryService(restClient, repositoryServiceConfiguration);
-        objectMapper = new ObjectMapper();
     }
 
     @Test
@@ -46,7 +44,7 @@ public class GithubRepositoryServiceTest {
     }
 
     @Test
-    public void retrieveRepositoriesErrorPath() throws IOException {
+    public void retrieveRepositoriesErrorPath() {
         ResponseEntity<GithubUserRepositoryResponse[]> expectedResponse = ResponseEntity.badRequest().build();
         when(restClient.getResponse(TEST_URL.formatted(USERNAME), GithubUserRepositoryResponse[].class)).thenReturn(expectedResponse);
         assertThatThrownBy(() -> githubRepositoryService.getUserRepositories(USERNAME)).isInstanceOf(RuntimeException.class).hasMessage("Error retrieving user repositories");
@@ -60,7 +58,5 @@ public class GithubRepositoryServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(BAD_USERNAME_MESSAGE);
     }
-
-
 
 }

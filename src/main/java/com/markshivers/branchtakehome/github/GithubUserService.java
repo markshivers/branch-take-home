@@ -1,11 +1,8 @@
 package com.markshivers.branchtakehome.github;
 
-import java.net.http.HttpResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.markshivers.branchtakehome.utility.RestClient;
 import com.markshivers.models.user.GithubUserResponse;
@@ -23,9 +20,9 @@ public class GithubUserService {
         this.userServiceConfiguration = userServiceConfiguration;
     }
 
-    public GithubUserResponse getVcsUser(String username) {
-        if (username == null || username.isEmpty()) {
-            throw new RuntimeException("Unable to retrieve blank username");
+    public GithubUserResponse getUser(String username) {
+        if (username == null || username.isBlank()) {
+            throw new IllegalArgumentException("Unable to retrieve user with blank username");
         }
         ResponseEntity<GithubUserResponse> callResponse = restClient.getResponse(userServiceConfiguration.url().formatted(username), GithubUserResponse.class);
         if (callResponse.getStatusCode() != HttpStatus.OK) {
