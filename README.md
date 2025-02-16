@@ -44,7 +44,7 @@ This project uses [jsonschema2pojo](http://www.jsonschema2pojo.org/) to generate
 - https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-a-user 
 - https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repositories-for-a-user
  
-This architecture ensures separation of concerns, making the application more maintainable and testable. It also focuses on immutability and functional programming principles where applicable. This can help prevent bugs if the application grows. I wanted to have a view representation, so I could easily construct the final result without being tightly coupled to the format github provided.
+This architecture ensures separation of concerns, making the application more maintainable and testable. It also focuses on immutability and functional programming principles where applicable. This can help prevent bugs as the application grows. I wanted to have a view representation, so I could easily construct the final result without being tightly coupled to the format github provided.
 
 ## Dependencies
 - Java 21
